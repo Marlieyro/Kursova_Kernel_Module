@@ -1,3 +1,6 @@
+#define DEBUG
+#define pr_fmt(fmt) "smod: " fmt
+
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/module.h>
@@ -12,7 +15,6 @@
 #define HAVE_PROC_OPS
 #endif
 
-// #define pr_fmt(fmt) "smod: " fmt
 #define INTERNAL_BUFFER_SIZE 256
 
 // Структура для proc
@@ -120,8 +122,8 @@ static int __init proc_sysfs_module_init(void){
 }
 
 static void __exit proc_sysfs_module_exit(void){
-    proc_remove(my_proc_dir_entry);\
     pr_info("My proc видално з пам'яті");
+    proc_remove(my_proc_dir_entry);
 }
 
 module_init(proc_sysfs_module_init);
