@@ -141,10 +141,10 @@ static int __init proc_sysfs_module_init(void){
     desc_text_for_init();
     show_mparam_var();
 
-    my_proc_dir_entry = proc_create("Kursova_Module", 0644, NULL, &proc_file_fops);
+    my_proc_dir_entry = proc_create("TEST_KURSOVA", 0644, NULL, &proc_file_fops);
     pr_debug("[proc_sysfs_module_init] proc_create() виконано\n");
 
-    my_kobj = kobject_create_and_add("my_sysfs", kernel_kobj);
+    my_kobj = kobject_create_and_add("my_sysfs", &THIS_MODULE->mkobj.kobj);
     sysfs_create_file(my_kobj, &mykobj_atr.attr);
     pr_debug("[proc_sysfs_module_init] sysfs_create_file() виконано\n");
 
