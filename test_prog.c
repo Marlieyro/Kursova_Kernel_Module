@@ -72,7 +72,7 @@ int read_from_sysfs(){
 
     buf[read_status] = '\0';
     
-    scanf(buf, "%hd", &read_var);
+    sscanf(buf, "%hd", &read_var);
 
     printf("[read_from_sysfs] прочитано - %hd\n", read_var);
 

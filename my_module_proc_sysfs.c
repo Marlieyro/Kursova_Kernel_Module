@@ -75,12 +75,12 @@ static void show_mparam_var(void){
 }
 
 static ssize_t my_proc_read(struct file *fptr, char __user *usr_buffer, size_t usr_buff_len, loff_t *buf_pos){
-    pr_debug("Виконується [my_proc_read] це proc\n");
+    pr_info("Виконується [my_proc_read] це proc\n");
     int module_buff_length = sizeof(internal_text_buffer_file);
     ssize_t returnCTURes = module_buff_length;
 
     if (*buf_pos >= module_buff_length) {
-        pr_debug("[my_proc_read] Читання вже завершене, ми на ласт символі\n"); 
+        pr_info("[my_proc_read] Читання вже завершене, ми на ласт символі\n"); 
         return 0;
     }
     // Віддаємо user рівно стільки байт скільки у нас є в буфері. Якщо віддати більше, вийдемо за межі 
@@ -90,25 +90,25 @@ static ssize_t my_proc_read(struct file *fptr, char __user *usr_buffer, size_t u
     returnCTURes = copy_to_user(usr_buffer, internal_text_buffer_file + *buf_pos, usr_buff_len);
     
     if (returnCTURes != 0) {
-    pr_debug("[my_proc_read] Помилка копіювання\n"); 
+    pr_info("[my_proc_read] Помилка копіювання\n"); 
     return -EFAULT;
     }
 
     // Щоб повторне читання відбулось з місце де закнічили
     *buf_pos += usr_buff_len;
-    pr_debug("[my_proc_read] дійшов до <return usr_buff_len>\n");
+    pr_info("[my_proc_read] дійшов до <return usr_buff_len>\n");
 
     return usr_buff_len;
 }
 
 static ssize_t my_proc_write(struct file *fptr, const char __user *usr_buffer, size_t num_to_write, loff_t *buf_pos){
-    pr_debug("Виконується [my_proc_write] це proc\n");
+    pr_info("Виконується [my_proc_write] це proc\n");
     int max_len = INTERNAL_BUFFER_SIZE - 1;
 
     if (num_to_write > max_len) num_to_write = max_len;
 
     if (copy_from_user(internal_text_buffer_file, usr_buffer, num_to_write)){ 
-        pr_debug("[my_proc_write] Операція запису провалилась\n");
+        pr_info("[my_proc_write] Операція запису провалилась\n");
         return -EFAULT;
     }
 
@@ -120,33 +120,33 @@ static ssize_t my_proc_write(struct file *fptr, const char __user *usr_buffer, s
 
     *buf_pos += num_to_write;
     
-    pr_debug("[my_proc_write]Операція запису завершилась успішно\n");
+    pr_info("[my_proc_write]Операція запису завершилась успішно\n");
     return num_to_write;
 }
 
 static ssize_t my_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf) {
-    pr_debug("Виконується [my_show] це sysfs\n");
+    pr_info("Виконується [my_show] це sysfs\n");
     return sprintf(buf, "%hd\n", my_sysfs_var);
 }
 
 static ssize_t my_store(struct kobject *kobj, struct kobj_attribute *attr, const char *buf, size_t count){
-    pr_debug("Виконується [my_store] це sysfs\n");
+    pr_info("Виконується [my_store] це sysfs\n");
     sscanf(buf, "%d\n", &my_sysfs_var);
     return count;
 }
 
 
 static int __init proc_sysfs_module_init(void){
-    pr_debug("[proc_sysfs_module_init] воконується\n");
+    pr_info("[proc_sysfs_module_init] воконується\n");
     desc_text_for_init();
     show_mparam_var();
 
     my_proc_dir_entry = proc_create("TEST_KURSOVA", 0644, NULL, &proc_file_fops);
-    pr_debug("[proc_sysfs_module_init] proc_create() виконано\n");
+    pr_info("[proc_sysfs_module_init] proc_create() виконано\n");
 
     my_kobj = kobject_create_and_add("my_sysfs", &THIS_MODULE->mkobj.kobj);
     sysfs_create_file(my_kobj, &mykobj_atr.attr);
-    pr_debug("[proc_sysfs_module_init] sysfs_create_file() виконано\n");
+    pr_info("[proc_sysfs_module_init] sysfs_create_file() виконано\n");
 
     return 0;
 }
