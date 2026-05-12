@@ -27,7 +27,7 @@ static long int_param = 10;
 
 static char internal_text_buffer_file[INTERNAL_BUFFER_SIZE] = "Mod txt\n";
 
-static unsigned short my_sysfs_var = 0;
+static unsigned short my_sysfs_var = 13;
 
 // ФУНКЦІЇ
 static void __init desc_text_for_init(void);
